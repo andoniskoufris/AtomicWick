@@ -4,7 +4,8 @@
 #include <iostream>
 #include <vector>
 
-int main() {
+int main()
+{
 
   Index index1;
   Index index2;
