@@ -2,20 +2,15 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 //! enum struct to track the type of ladder diagram i.e. if it is a
 // creation/annihilation operator
-enum LadderType
-{
-  creation,
-  annihilation
-};
+enum LadderType { creation, annihilation };
 
 //! enum struct to track index type
-enum IndexType
-{
+enum IndexType {
   core,
   excited,
   any,
@@ -25,8 +20,7 @@ enum IndexType
 };
 
 //! struct to store the index type and index string of a ladder operator
-struct Index
-{
+struct Index {
 private:
   std::string m_stringindex;
   IndexType m_indextype;
@@ -36,41 +30,26 @@ public:
   void setIndexType(IndexType i_type) { m_indextype = i_type; };
   IndexType getIndexType() { return m_indextype; };
   const char *getIndexString() { return m_stringindex.c_str(); };
-  const char *parseIndexType()
-  {
-    if (m_indextype == core)
-    {
+  const char *parseIndexType() {
+    if (m_indextype == core) {
       return "core";
-    }
-    else if (m_indextype == excited)
-    {
+    } else if (m_indextype == excited) {
       return "excited";
-    }
-    else if (m_indextype == any)
-    {
+    } else if (m_indextype == any) {
       return "any";
-    }
-    else if (m_indextype == valence)
-    {
+    } else if (m_indextype == valence) {
       return "valence";
-    }
-    else if (m_indextype == excited_but_valence)
-    {
+    } else if (m_indextype == excited_but_valence) {
       return "excited != valence";
-    }
-    else if (m_indextype == any_but_valence)
-    {
+    } else if (m_indextype == any_but_valence) {
       return "any != valence";
-    }
-    else
-    {
+    } else {
       throw std::runtime_error("bad");
     }
   };
 };
 
-class LadderOperator
-{
+class LadderOperator {
 private:
   Index m_index;
   LadderType m_laddertype;
@@ -82,8 +61,7 @@ public:
   // overload for when we individually want to give it an index string and an
   // index type
   LadderOperator(LadderType laddertype, IndexType i_type,
-                 std::string i_string)
-  {
+                 std::string i_string) {
     m_index.setIndexString(i_string);
     m_index.setIndexType(i_type);
     m_laddertype = laddertype;
@@ -93,12 +71,11 @@ public:
   LadderType getLadderType() { return m_laddertype; };
   IndexType getIndexType() { return m_index.getIndexType(); };
 
-  void getInfo()
-  {
+  void getInfo() {
 
     const char *dagger_str = m_laddertype == creation ? "^†" : "";
-    printf("a\xCC\x82%s(%s)  (%s index)\n", dagger_str, m_index.getIndexString(),
-           m_index.parseIndexType());
+    printf("a\xCC\x82%s(%s)  (%s index)\n", dagger_str,
+           m_index.getIndexString(), m_index.parseIndexType());
     ;
   }
 };
