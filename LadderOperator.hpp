@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath>
 #include <cstring>
 #include <fstream>
@@ -49,14 +50,43 @@ public:
   };
 };
 
+//! struct for the type of HoleParticle operator it is
+// creation operator if it excites a particle/hole
+// annihilation operator if it destroys a particle/hole
+enum HoleParticleType { creation, annihilation };
+
+//! function to determine if the ladder operator is a particle/hole creation or
+// annihilation operator
+// used when determining if it needs to be moved when normal ordering strings of
+// creation/annihilation operators
+HoleParticleType determineHoleParticleType(LadderOperator a) {
+  HoleParticleType out;
+  if ((a.getIndexType() == IndexType::valence ||
+       a.getIndexType() == IndexType::excited ||
+       a.getIndexType() == IndexType::excited_but_valence) &&
+      a.getLadderType() == annihilation) {
+    out = HoleParticleType::annihilation;
+  } else if (a.getIndexType() == IndexType::core &&
+             a.getLadderType() == creation) {
+    out = HoleParticleType::annihilation;
+  } else {
+    out = HoleParticleType::creation;
+  }
+  return out;
+}
+
 class LadderOperator {
 private:
   Index m_index;
   LadderType m_laddertype;
+  HoleParticleType m_hptype;
 
 public:
   LadderOperator(LadderType laddertype, Index index)
-      : m_index(index), m_laddertype(laddertype) {};
+      : m_index(index), m_laddertype(laddertype) {
+
+    m_hptype = determineHoleParticleType(this);
+  };
 
   // overload for when we individually want to give it an index string and an
   // index type
@@ -70,6 +100,7 @@ public:
   Index getindex() { return m_index; };
   LadderType getLadderType() { return m_laddertype; };
   IndexType getIndexType() { return m_index.getIndexType(); };
+  HoleParticleType getHoleParticleType() { return m_hptype; };
 
   void getInfo() {
 

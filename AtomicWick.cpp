@@ -1,11 +1,11 @@
+#pragma once
 #include "OperatorChain.hpp"
 #include <cmath>
 #include <fstream>
 #include <iostream>
 #include <vector>
 
-int main()
-{
+int main() {
 
   Index index1;
   Index index2;
