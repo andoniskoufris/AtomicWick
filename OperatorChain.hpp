@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 
+bool check_is_in_normal_order(std::vector<LadderOperator> chain);
+
 //! struct for keeping track of the sign of an OperatorChain
 // used for when we want to put operator products into normal order for Wick's
 // theorem
@@ -23,18 +25,24 @@ public:
   OperatorChain(std::vector<LadderOperator> operator_prod,
                 Sign sign = Sign::Positive)
       : m_ochain(operator_prod), m_sign(sign) {
-    // function goes here for setting m_is_in_normal_order
-    m_is_in_normal_order = true;
+    // checks if the vector list is in normal order
+    m_is_in_normal_order = check_is_in_normal_order(operator_prod);
   };
 
   //! constructor for an operator chain with an initialiser list of ladder
   //! operators
   OperatorChain(std::initializer_list<LadderOperator> operator_prod,
                 Sign sign = Sign::Positive)
-      : m_ochain(operator_prod), m_is_in_normal_order(false), m_sign(sign) {};
+      : m_ochain(operator_prod), m_sign(sign) {
+    m_is_in_normal_order =
+        check_is_in_normal_order(std::vector<LadderOperator>{operator_prod});
+  };
 
   //! function for returning sign of the operator product
   Sign getSign() { return m_sign; }
+
+  //! function for setting sign of the operator product
+  void setSign(Sign in_sign) { m_sign = in_sign; }
 
   //! returns by copy the i'th ladder operator in the chain
   LadderOperator at(int i) const { return m_ochain[i]; }
@@ -51,39 +59,24 @@ public:
   // returns by reference
   LadderOperator &operator[](int i) { return at(i); }
 
+  int size() { return m_ochain.size(); }
+
   //! function for normally ordering an operator product
   // moves all core creation operators and valence annihilation operators to the
   // right
   // updates sign from the permutation of the operators
   void NormalOrder();
 
-  //! getter for if the function is in normal order
-  bool is_in_normal_order() { return m_is_in_normal_order; }
+  //! prints if if the function is in normal order
+  void is_in_normal_order();
+
+  //! prints the operators in the chain
+  // right now it just prints c if the operator corresponds to a core state and
+  // n if it corresponds to an excited state not sure how best to deal with the
+  // index problem...
+  void print();
+
+  //!  prints the operators in the chain but writes them as hole-particle
+  //!  operators (b or b^†)
+  void print_HPform();
 };
-
-void OperatorChain::NormalOrder() {
-
-  int counter = m_ochain.size();
-  OperatorChain out = m_ochain;
-
-  for (int i = m_ochain.size() - 1; i = 0; i--) {
-    LadderOperator a = m_ochain[i];
-    if (a.getHoleParticleType() == HoleParticleType::annihilation) {
-      out[counter] = a;
-      counter = 0;
-    }
-    if (a.getHoleParticleType() == HoleParticleType::creation) {
-      LadderOperator b = m_ochain[i];
-      counter += 1;
-      while (b.getHoleParticleType() == HoleParticleType::creation) {
-        b = m_ochain[i - counter];
-        out[i - counter] = m_ochain[i - counter - 1]; // not right
-        counter += 1;
-      }
-      out[i] = m_ochain[i - counter];
-      for (int j = 1; j < counter; j++) {
-        out[i - j] = m_ochain[i - j - 1];
-      }
-    }
-  }
-}
