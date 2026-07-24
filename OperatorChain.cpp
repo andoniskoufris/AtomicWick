@@ -156,6 +156,10 @@ bool check_is_in_normal_order(std::vector<LadderOperator> chain) {
 //=============================================================================
 //=============================================================================
 void OperatorChain::print() {
+  // print negative sign in case the function is negative
+  if (m_sign == Sign::Negative) {
+    std::cout << "- ";
+  }
   for (auto a : m_ochain) {
     a.printInfo();
   }
@@ -172,6 +176,9 @@ void OperatorChain::is_in_normal_order() {
 //=============================================================================
 //=============================================================================
 void OperatorChain::print_HPform() {
+  if (m_sign == Sign::Negative) {
+    std::cout << "- ";
+  }
   for (auto a : m_ochain) {
     a.print_HPInfo();
     std::cout << " ";
