@@ -63,66 +63,6 @@ void OperatorChain::NormalOrder() {
 // order (as read from left to right in the vector)
 bool check_is_in_normal_order(std::vector<LadderOperator> chain) {
 
-  //   int i = chain.size() - 1;
-  //   // keeps track of how many creation operators there are
-  //   // in a given chain of them
-  //   int num_creation = 0;
-  //   int pos_last_destruction = i;
-  //   int num_swaps = 0;
-
-  //   // loops through positions in m_ochain
-  //   while (i >= 0) {
-  //     LadderOperator a = chain[i];
-
-  //     // the number of swaps we made is equal to the number of creation
-  //     operators
-  //     // that _weren't_ at the end of the original chain
-  //     num_swaps += num_creation;
-
-  //     // if the operator at position i is creation or undetermined (because
-  //     it has
-  //     // an index for any state), we just keep going
-  //     if (a.getHoleParticleType() ==
-  //             HoleParticle::HoleParticleType::annihilation ||
-  //         a.getHoleParticleType() ==
-  //             HoleParticle::HoleParticleType::undetermined) {
-  //       i -= 1;
-  //     }
-  //     if (a.getHoleParticleType() ==
-  //     HoleParticle::HoleParticleType::creation) {
-  //       LadderOperator c = chain[i];
-  //       num_creation = 0;
-  //       // index of last creation operator in the chain so that we know to
-  //       place
-  //       // the destruction operator we eventually find next to this one
-  //       pos_last_destruction = i - 1;
-
-  //       // this now loops through every operator past the HP creation
-  //       operator we
-  //       // found until we get to a HP creation operator
-  //       while (c.getHoleParticleType() ==
-  //                  HoleParticle::HoleParticleType::creation &&
-  //              i - num_creation >= 1) {
-  //         // incrementing num_creation in this while loop ensures that it is
-  //         1 if
-  //         // there is only one operator we need to move through
-  //         num_creation += 1;
-  //         c = chain[i - num_creation];
-  //       }
-  //       // decrease i by the number of creation operators we encountered, so
-  //       we
-  //       // don't revisit creation operators we have already gone through
-  //       // the +1 means that we go past the next creation operator we found
-  //       as
-  //       // well
-  //       if (i == 0) {
-  //         num_swaps = 0;
-  //       } else {
-  //         i -= num_creation + 1;
-  //       }
-  //     }
-  //   }
-
   // keeps track of how many creation operators there are
   // in a given chain of them
   int num_creation = 0;
@@ -163,6 +103,7 @@ void OperatorChain::print() {
   for (auto a : m_ochain) {
     a.printInfo();
   }
+  std::cout << std::endl;
 }
 
 //=============================================================================
@@ -171,6 +112,7 @@ void OperatorChain::is_in_normal_order() {
   const char *qualifier = m_is_in_normal_order == true ? " " : " _not_ ";
 
   printf("This operator is%sin normal order!", qualifier);
+  std::cout << std::endl;
 }
 
 //=============================================================================
@@ -183,4 +125,5 @@ void OperatorChain::print_HPform() {
     a.print_HPInfo();
     std::cout << " ";
   }
+  std::cout << std::endl;
 }

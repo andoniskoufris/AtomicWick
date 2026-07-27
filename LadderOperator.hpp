@@ -104,7 +104,7 @@ public:
   void printHoleParticleType();
 
   //! print the ladder operator out
-  void printInfo();
+  void printInfo(bool verbose = true);
 
   //! print the ladder operator as a hole-particle operator
   void print_HPInfo();

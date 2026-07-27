@@ -41,7 +41,7 @@ void LadderOperator::printHoleParticleType() {
 
 //=============================================================================
 //=============================================================================
-void LadderOperator::printInfo() {
+void LadderOperator::printInfo(bool verbose) {
 
   const char *dagger_str =
       m_laddertype == Ladder::LadderType::creation ? "^†" : "";
